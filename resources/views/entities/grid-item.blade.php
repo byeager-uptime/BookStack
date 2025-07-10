@@ -3,13 +3,14 @@
     <div class="bg-{{ $entity->getType() }} featured-image-container-wrap">
         <div class="featured-image-container" @if($entity->cover) style="background-image: url('{{ $entity->getBookCover() }}')"@endif>
         </div>
-        @icon($entity->getType())
+        @if($entity->getType() === 'bookshelf' && $entity->parent_id === null)
+            @icon('grid')
+        @else
+            @icon($entity->getType())
+        @endif
     </div>
     <div class="grid-card-content">
         <h2 class="text-limit-lines-2">
-            @if($entity->getType() === 'bookshelf' && $entity->parent_id === null)
-                <span class="badge badge-primary">Room</span>
-            @endif
             {{ $entity->name }}
         </h2>
         <p class="text-muted">{{ $entity->getExcerpt(130) }}</p>

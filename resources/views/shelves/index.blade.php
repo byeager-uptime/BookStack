@@ -1,7 +1,7 @@
 @extends('layouts.tri')
 
 @section('body')
-    @include('shelves.parts.list', ['shelves' => $shelves, 'view' => $view, 'listOptions' => $listOptions])
+    @include('shelves.parts.list', ['shelves' => $shelves, 'view' => $view, 'listOptions' => $listOptions, 'isRoomsOnly' => $isRoomsOnly ?? false, 'isShelvesOnly' => $isShelvesOnly ?? false])
 @stop
 
 @section('right')
@@ -12,7 +12,15 @@
             @if(userCan('bookshelf-create-all'))
                 <a href="{{ url("/create-shelf") }}" data-shortcut="new" class="icon-list-item">
                     <span>@icon('add')</span>
-                    <span>{{ trans('entities.shelves_new_action') }}</span>
+                    <span>
+                        @if(isset($isRoomsOnly) && $isRoomsOnly)
+                            {{ trans('entities.rooms_new_action') }}
+                        @elseif(isset($isShelvesOnly) && $isShelvesOnly)
+                            {{ trans('entities.shelves_new_action') }}
+                        @else
+                            {{ trans('entities.rooms_new_action') }}
+                        @endif
+                    </span>
                 </a>
             @endif
 

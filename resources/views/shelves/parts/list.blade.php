@@ -1,7 +1,15 @@
 <main class="content-wrap mt-m card">
 
     <div class="grid half v-center">
-        <h1 class="list-heading">{{ trans('entities.shelves') }}</h1>
+        <h1 class="list-heading">
+            @if(isset($isRoomsOnly) && $isRoomsOnly)
+                {{ trans('entities.rooms') }}
+            @elseif(isset($isShelvesOnly) && $isShelvesOnly)
+                {{ trans('entities.shelves_only') }}
+            @else
+                {{ trans('entities.rooms') }}
+            @endif
+        </h1>
         <div class="text-right">
             @include('common.sort', $listOptions->getSortControlData())
         </div>

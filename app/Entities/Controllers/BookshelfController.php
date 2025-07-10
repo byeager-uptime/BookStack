@@ -40,8 +40,18 @@ class BookshelfController extends Controller
             'updated_at' => trans('common.sort_updated_at'),
         ]);
 
-        $shelves = $this->queries->visibleForListWithCover()
-            ->where('parent_id', null)  // Only show top-level shelves
+        $query = $this->queries->visibleForListWithCover();
+        
+        // Handle filtering based on request parameters
+        if ($request->has('rooms_only')) {
+            $query->where('parent_id', null);  // Only show top-level shelves (Rooms)
+        } elseif ($request->has('shelves_only')) {
+            $query->whereNotNull('parent_id');  // Only show child shelves
+        } else {
+            $query->where('parent_id', null);  // Default: show only top-level shelves
+        }
+        
+        $shelves = $query
             ->with('visibleChildren')   // Eager load children
             ->orderBy($listOptions->getSort(), $listOptions->getOrder())
             ->paginate(18);
@@ -53,7 +63,15 @@ class BookshelfController extends Controller
             ->get();
 
         $this->shelfContext->clearShelfContext();
-        $this->setPageTitle(trans('entities.shelves'));
+        
+        // Set appropriate page title based on filter
+        if ($request->has('rooms_only')) {
+            $this->setPageTitle(trans('entities.rooms'));
+        } elseif ($request->has('shelves_only')) {
+            $this->setPageTitle(trans('entities.shelves_only'));
+        } else {
+            $this->setPageTitle(trans('entities.rooms'));
+        }
 
         return view('shelves.index', [
             'shelves'     => $shelves,
@@ -62,22 +80,28 @@ class BookshelfController extends Controller
             'new'         => $new,
             'view'        => $view,
             'listOptions' => $listOptions,
+            'isRoomsOnly' => $request->has('rooms_only'),
+            'isShelvesOnly' => $request->has('shelves_only'),
         ]);
     }
 
     /**
      * Show the form for creating a new bookshelf.
      */
-    public function create()
+    public function create(Request $request)
     {
         $this->checkPermission('bookshelf-create-all');
         $books = $this->bookQueries->visibleForList()->orderBy('name')->get(['name', 'id', 'slug', 'created_at', 'updated_at']);
         $shelves = $this->queries->visibleForList()->orderBy('name')->get(['name', 'id', 'slug']);
         $this->setPageTitle(trans('entities.shelves_create'));
 
+        // Set default parent_id if provided in URL
+        $defaultParentId = $request->get('parent_id');
+
         return view('shelves.create', [
             'books' => $books,
-            'parentShelves' => $shelves
+            'parentShelves' => $shelves,
+            'defaultParentId' => $defaultParentId
         ]);
     }
 

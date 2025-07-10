@@ -16,7 +16,7 @@
         <option value="">{{ trans('entities.shelves_no_parent') }}</option>
         @foreach($parentShelves as $parentShelf)
             <option value="{{ $parentShelf->id }}" 
-                @if((isset($shelf) && $shelf->parent_id == $parentShelf->id) || old('parent_id') == $parentShelf->id) selected @endif>
+                @if((isset($shelf) && $shelf->parent_id == $parentShelf->id) || old('parent_id') == $parentShelf->id || (isset($defaultParentId) && $defaultParentId == $parentShelf->id)) selected @endif>
                 {{ $parentShelf->name }}
             </option>
         @endforeach

@@ -138,6 +138,19 @@
         <h5>{{ trans('common.actions') }}</h5>
         <div class="icon-list text-link">
 
+            @if(userCan('bookshelf-create-all'))
+                <a href="{{ url('/create-shelf?parent_id=' . $shelf->id) }}" data-shortcut="new-shelf" class="icon-list-item">
+                    <span class="icon">@icon('add')</span>
+                    <span>
+                        @if($shelf->parent_id === null)
+                            {{ trans('entities.shelves_new_action') }}
+                        @else
+                            {{ trans('entities.shelves_new_action') }}
+                        @endif
+                    </span>
+                </a>
+            @endif
+
             @if(userCan('book-create-all') && userCan('bookshelf-update', $shelf))
                 <a href="{{ $shelf->getUrl('/create-book') }}" data-shortcut="new" class="icon-list-item">
                     <span class="icon">@icon('add')</span>

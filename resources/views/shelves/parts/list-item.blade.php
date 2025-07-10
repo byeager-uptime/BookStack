@@ -1,12 +1,13 @@
 <a href="{{ $shelf->getUrl() }}" class="shelf entity-list-item" data-entity-type="bookshelf" data-entity-id="{{$shelf->id}}">
     <div class="entity-list-item-image bg-bookshelf @if($shelf->image_id) has-image @endif" style="background-image: url('{{ $shelf->getBookCover() }}')">
-        @icon('bookshelf')
+        @if($shelf->parent_id === null)
+            @icon('grid')
+        @else
+            @icon('bookshelf')
+        @endif
     </div>
     <div class="content py-xs">
         <h4 class="entity-list-item-name break-text">
-            @if($shelf->parent_id === null)
-                <span class="badge badge-primary">Room</span>
-            @endif
             {{ $shelf->name }}
         </h4>
         <div class="entity-item-snippet">
