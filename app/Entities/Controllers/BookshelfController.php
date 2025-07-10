@@ -41,6 +41,8 @@ class BookshelfController extends Controller
         ]);
 
         $shelves = $this->queries->visibleForListWithCover()
+            ->where('parent_id', null)  // Only show top-level shelves
+            ->with('visibleChildren')   // Eager load children
             ->orderBy($listOptions->getSort(), $listOptions->getOrder())
             ->paginate(18);
         $recents = $this->isSignedIn() ? $this->queries->recentlyViewedForCurrentUser()->get() : false;
@@ -70,9 +72,13 @@ class BookshelfController extends Controller
     {
         $this->checkPermission('bookshelf-create-all');
         $books = $this->bookQueries->visibleForList()->orderBy('name')->get(['name', 'id', 'slug', 'created_at', 'updated_at']);
+        $shelves = $this->queries->visibleForList()->orderBy('name')->get(['name', 'id', 'slug']);
         $this->setPageTitle(trans('entities.shelves_create'));
 
-        return view('shelves.create', ['books' => $books]);
+        return view('shelves.create', [
+            'books' => $books,
+            'parentShelves' => $shelves
+        ]);
     }
 
     /**
@@ -89,6 +95,7 @@ class BookshelfController extends Controller
             'description_html' => ['string', 'max:2000'],
             'image'            => array_merge(['nullable'], $this->getImageValidationRules()),
             'tags'             => ['array'],
+            'parent_id'        => ['nullable', 'integer', 'exists:bookshelves,id'],
         ]);
 
         $bookIds = explode(',', $request->get('books', ''));
@@ -130,6 +137,7 @@ class BookshelfController extends Controller
         return view('shelves.show', [
             'shelf'                   => $shelf,
             'sortedVisibleShelfBooks' => $sortedVisibleShelfBooks,
+            'childShelves'            => $shelf->visibleChildren()->orderBy('name')->get(),
             'view'                    => $view,
             'activity'                => $activities->entityActivity($shelf, 20, 1),
             'listOptions'             => $listOptions,
@@ -150,12 +158,20 @@ class BookshelfController extends Controller
             ->whereNotIn('id', $shelfBookIds)
             ->orderBy('name')
             ->get(['name', 'id', 'slug', 'created_at', 'updated_at']);
+        
+        // Get potential parent shelves (excluding self and descendants)
+        $excludeIds = array_merge([$shelf->id], $shelf->descendants()->pluck('id')->toArray());
+        $parentShelves = $this->queries->visibleForList()
+            ->whereNotIn('id', $excludeIds)
+            ->orderBy('name')
+            ->get(['name', 'id', 'slug']);
 
         $this->setPageTitle(trans('entities.shelves_edit_named', ['name' => $shelf->getShortName()]));
 
         return view('shelves.edit', [
             'shelf' => $shelf,
             'books' => $books,
+            'parentShelves' => $parentShelves,
         ]);
     }
 
@@ -175,6 +191,7 @@ class BookshelfController extends Controller
             'description_html' => ['string', 'max:2000'],
             'image'            => array_merge(['nullable'], $this->getImageValidationRules()),
             'tags'             => ['array'],
+            'parent_id'        => ['nullable', 'integer', 'exists:bookshelves,id'],
         ]);
 
         if ($request->has('image_reset')) {

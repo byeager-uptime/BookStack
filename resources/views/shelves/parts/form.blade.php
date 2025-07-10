@@ -9,6 +9,21 @@
     @include('form.description-html-input')
 </div>
 
+@if(isset($parentShelves) && count($parentShelves) > 0)
+<div class="form-group">
+    <label for="parent_id">{{ trans('entities.shelves_parent') }}</label>
+    <select name="parent_id" id="parent_id" class="form-control">
+        <option value="">{{ trans('entities.shelves_no_parent') }}</option>
+        @foreach($parentShelves as $parentShelf)
+            <option value="{{ $parentShelf->id }}" 
+                @if((isset($shelf) && $shelf->parent_id == $parentShelf->id) || old('parent_id') == $parentShelf->id) selected @endif>
+                {{ $parentShelf->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+@endif
+
 <div component="shelf-sort" class="grid half gap-xl">
     <div class="form-group">
         <label for="books" id="shelf-sort-books-label">{{ trans('entities.shelves_books') }}</label>

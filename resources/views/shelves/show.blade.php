@@ -12,9 +12,14 @@
 @section('body')
 
     <div class="mb-s print-hidden">
-        @include('entities.breadcrumbs', ['crumbs' => [
-            $shelf,
-        ]])
+        @php
+            $crumbs = collect([$shelf]);
+            $ancestors = $shelf->ancestors();
+            if ($ancestors->count() > 0) {
+                $crumbs = $ancestors->merge($crumbs);
+            }
+        @endphp
+        @include('entities.breadcrumbs', ['crumbs' => $crumbs])
     </div>
 
     <main class="card content-wrap">
@@ -29,6 +34,28 @@
 
         <div class="book-content">
             <div class="text-muted break-text">{!! $shelf->descriptionHtml() !!}</div>
+            
+            @if($childShelves->count() > 0)
+                <h5 class="mt-m">{{ trans('entities.shelves_child_shelves') }}</h5>
+                @if($view === 'list')
+                    <div class="entity-list">
+                        @foreach($childShelves as $childShelf)
+                            @include('shelves.parts.list-item', ['shelf' => $childShelf])
+                        @endforeach
+                    </div>
+                @else
+                    <div class="grid third">
+                        @foreach($childShelves as $childShelf)
+                            @include('entities.grid-item', ['entity' => $childShelf])
+                        @endforeach
+                    </div>
+                @endif
+                
+                @if(count($sortedVisibleShelfBooks) > 0)
+                    <h5 class="mt-m">{{ trans('entities.books') }}</h5>
+                @endif
+            @endif
+            
             @if(count($sortedVisibleShelfBooks) > 0)
                 @if($view === 'list')
                     <div class="entity-list">

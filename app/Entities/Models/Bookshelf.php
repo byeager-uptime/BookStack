@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bookshelf extends Entity implements HasCoverImage
 {
@@ -17,9 +18,14 @@ class Bookshelf extends Entity implements HasCoverImage
 
     public float $searchFactor = 1.2;
 
-    protected $fillable = ['name', 'description', 'image_id'];
+    protected $fillable = ['name', 'description', 'image_id', 'parent_id', 'depth'];
 
     protected $hidden = ['image_id', 'deleted_at', 'description_html'];
+
+    protected $casts = [
+        'parent_id' => 'integer',
+        'depth' => 'integer',
+    ];
 
     /**
      * Get the books in this shelf.
@@ -40,6 +46,69 @@ class Bookshelf extends Entity implements HasCoverImage
     public function visibleBooks(): BelongsToMany
     {
         return $this->books()->scopes('visible');
+    }
+
+    /**
+     * Get the parent shelf this shelf belongs to.
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Bookshelf::class, 'parent_id');
+    }
+
+    /**
+     * Get the child shelves of this shelf.
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Bookshelf::class, 'parent_id')->orderBy('name');
+    }
+
+    /**
+     * Get the visible child shelves of this shelf.
+     */
+    public function visibleChildren(): HasMany
+    {
+        return $this->children()->scopes('visible');
+    }
+
+    /**
+     * Check if this shelf has any children.
+     */
+    public function hasChildren(): bool
+    {
+        return $this->children()->count() > 0;
+    }
+
+    /**
+     * Get all ancestor shelves of this shelf.
+     */
+    public function ancestors()
+    {
+        $ancestors = collect();
+        $parent = $this->parent;
+        
+        while ($parent) {
+            $ancestors->push($parent);
+            $parent = $parent->parent;
+        }
+        
+        return $ancestors->reverse();
+    }
+
+    /**
+     * Get all descendant shelves of this shelf.
+     */
+    public function descendants()
+    {
+        $descendants = collect();
+        
+        foreach ($this->children as $child) {
+            $descendants->push($child);
+            $descendants = $descendants->merge($child->descendants());
+        }
+        
+        return $descendants;
     }
 
     /**

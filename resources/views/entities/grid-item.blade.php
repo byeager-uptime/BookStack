@@ -6,7 +6,12 @@
         @icon($entity->getType())
     </div>
     <div class="grid-card-content">
-        <h2 class="text-limit-lines-2">{{ $entity->name }}</h2>
+        <h2 class="text-limit-lines-2">
+            @if($entity->getType() === 'bookshelf' && $entity->parent_id === null)
+                <span class="badge badge-primary">Room</span>
+            @endif
+            {{ $entity->name }}
+        </h2>
         <p class="text-muted">{{ $entity->getExcerpt(130) }}</p>
     </div>
     <div class="grid-card-footer text-muted ">

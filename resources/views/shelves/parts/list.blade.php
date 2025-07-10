@@ -14,7 +14,7 @@
                     @if ($index !== 0)
                         <hr class="my-m">
                     @endif
-                    @include('shelves.parts.list-item', ['shelf' => $shelf])
+                    @include('shelves.parts.list-item-hierarchical', ['shelf' => $shelf, 'indentLevel' => 0])
                 @endforeach
             </div>
         @else
