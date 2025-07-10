@@ -51,7 +51,9 @@
             </div>
         </div>
     @endif
+@stop
 
+@section('right')
     @if (isset($pageNav) && count($pageNav))
         <nav id="page-navigation" class="mb-xl" aria-label="{{ trans('entities.pages_navigation') }}">
             <h5>{{ trans('entities.pages_navigation') }}</h5>
@@ -69,9 +71,7 @@
     @endif
 
     @include('entities.book-tree', ['book' => $book, 'sidebarTree' => $sidebarTree])
-@stop
 
-@section('right')
     <div id="page-details" class="entity-details mb-xl">
         <h5>{{ trans('common.details') }}</h5>
         <div class="blended-links">
