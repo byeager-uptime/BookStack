@@ -1,0 +1,410 @@
+/* Buffer-Inspired Landing Page - Clean Design Following BookStack Standards */
+
+/* Override body styling for landing page only */
+body.buffer-landing-page {
+    background: #ffffff !important;
+}
+
+body.dark-mode.buffer-landing-page {
+    background: #1a1a1a !important;
+}
+
+/* Override the main wrapper too */
+body.buffer-landing-page .tri-layout-container,
+body.buffer-landing-page .tri-layout-container .tri-layout-content {
+    background: #ffffff !important;
+}
+
+/* Hide navigation elements when on landing page (applies to all users) */
+body.buffer-landing-page .header-links a[href*="/shelves"],
+body.buffer-landing-page .header-links a[href*="/books"],
+body.buffer-landing-page .header-links a[data-shortcut="bookcases_view"],
+body.buffer-landing-page .header-links a[data-shortcut="shelves_view"],
+body.buffer-landing-page .header-links a[data-shortcut="books_view"] {
+    display: none !important;
+}
+
+/* Hide header search bar completely on landing page */
+body.buffer-landing-page #header .search-box {
+    display: none !important;
+}
+
+/* Hide skip to content link on landing page */
+body.buffer-landing-page .skip-to-content {
+    display: none !important;
+}
+
+/* Hero Section - Clean and Prominent */
+.buffer-hero-section {
+    background: #f8fafc !important;
+    text-align: center;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.dark-mode .buffer-hero-section {
+    background: #2d3748 !important;
+}
+
+.hero-title {
+    font-size: 2.8275em; /* BookStack h2 size */
+    font-weight: 600;
+    color: #2d3748 !important;
+    margin: 0;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #4a5568 !important;
+    margin: 0;
+}
+
+.dark-mode .hero-title {
+    color: #f7fafc !important;
+}
+
+.dark-mode .hero-subtitle {
+    color: #cbd5e0 !important;
+}
+
+/* Hero Search Bar (for non-logged-in users) */
+.hero-search-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Hero search box styling - Override ALL BookStack defaults */
+.hero-search-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-search-container .search-box {
+    background: #ffffff !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    height: 60px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.dark-mode .hero-search-container .search-box {
+    background: #4a5568 !important;
+    border-color: #718096 !important;
+}
+
+.hero-search-container .search-box:focus-within {
+    border-color: var(--color-text-muted) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.hero-search-container .search-box button[type="submit"] {
+    position: absolute !important;
+    left: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--color-text-muted) !important;
+    background: none !important;
+    border: none !important;
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer !important;
+}
+
+.hero-search-container .search-box button .svg-icon {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.hero-search-container .search-box input {
+    display: block !important;
+    width: 100% !important;
+    font-size: 1.1rem !important;
+    padding: 0 20px 0 50px !important;
+    color: var(--color-text) !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    height: 56px !important;
+    line-height: 56px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    text-align: left !important;
+}
+
+.hero-search-container .search-box input::placeholder {
+    color: var(--color-text-muted) !important;
+}
+
+/* Search suggestions dropdown styling for hero */
+.hero-search-container .global-search-suggestions {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    margin-top: 4px !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 4px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    display: none;
+}
+
+/* Dark mode suggestions */
+.dark-mode .hero-search-container .global-search-suggestions {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+}
+
+/* Show suggestions when search is active */
+.hero-search-container .search-box.search-active .global-search-suggestions,
+.hero-search-container .search-box:focus-within .global-search-suggestions {
+    display: block !important;
+}
+
+/* Search suggestions dropdown - Fixed structure */
+.hero-search-container .global-search-suggestions {
+    min-width: 100%;
+    max-height: 400px;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    padding: 0 !important;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark-mode .hero-search-container .global-search-suggestions {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+}
+
+/* Container for results - takes up available space */
+.hero-search-container .global-search-suggestions .px-m {
+    padding: 0 !important;
+    margin: 0 !important;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style the entity list - scrollable results area */
+.hero-search-container .entity-list {
+    padding: 8px !important;
+    margin: 0 !important;
+    max-height: 280px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Style individual results */
+.hero-search-container .entity-list-item {
+    padding: 10px 12px !important;
+    margin: 0 0 2px 0 !important;
+    border-radius: 6px !important;
+    transition: background 0.2s ease !important;
+}
+
+.hero-search-container .entity-list-item:hover {
+    background: #f3f4f6 !important;
+}
+
+.dark-mode .hero-search-container .entity-list-item:hover {
+    background: #374151 !important;
+}
+
+/* Hide the View All button completely */
+.hero-search-container .card-footer-link {
+    display: none !important;
+}
+
+/* Hide loading state completely */
+.hero-search-container .global-search-loading {
+    display: none !important;
+}
+
+
+/* Quick Actions in Hero */
+.hero-quick-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Category Grid - Buffer Style */
+.buffer-categories-section {
+    background: #ffffff !important;
+}
+
+.dark-mode .buffer-categories-section {
+    background: #1a1a1a !important;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px; /* BookStack l spacing */
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px; /* Rounded corners as requested */
+    text-decoration: none;
+    color: #2d3748 !important;
+    transition: all 0.2s ease;
+    padding: 32px 24px; /* More vertical padding for better proportion */
+    height: auto;
+    min-height: 200px;
+}
+
+.dark-mode .category-card {
+    background: #4a5568 !important;
+    border-color: #718096 !important;
+    color: #f7fafc !important;
+}
+
+.category-card:hover {
+    border-color: var(--color-text-muted);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: var(--color-text);
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+.category-card:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.category-placeholder {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.category-placeholder:hover {
+    border-color: var(--color-border);
+    box-shadow: none;
+}
+
+.category-icon {
+    color: var(--color-text-muted);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 16px;
+}
+
+.category-icon .svg-icon {
+    width: 2rem;
+    height: 2rem;
+}
+
+.category-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2d3748 !important;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+}
+
+.category-description {
+    font-size: 1rem;
+    color: #4a5568 !important;
+    margin: 0 0 auto 0;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.category-count {
+    font-size: 0.875rem;
+    color: #718096 !important;
+    font-weight: 500;
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+.dark-mode .category-title {
+    color: #f7fafc !important;
+}
+
+.dark-mode .category-description {
+    color: #cbd5e0 !important;
+}
+
+.dark-mode .category-count {
+    color: #a0aec0 !important;
+}
+
+/* Footer Section */
+.buffer-footer {
+    background: var(--color-page);
+    border-top: 1px solid var(--color-border-light);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-links .text-button {
+    font-size: 0.9rem;
+}
+
+.footer-links .text-muted {
+    margin: 0 8px;
+}
+
+/* Responsive Design - Use BookStack breakpoints */
+@media (max-width: 880px) { /* BookStack bp-m */
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-search-container {
+        max-width: 100%;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .footer-links .text-muted {
+        display: none;
+    }
+}
+
+/* Dark Mode Support - Automatic via BookStack CSS variables */
+/* All colors use CSS variables, so dark mode works automatically */
